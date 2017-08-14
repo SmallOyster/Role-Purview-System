@@ -6,7 +6,7 @@
 * Copyright (C) 2016-2017
 * ------------------------------------
 */
-  
+
 $dbcon=null;
 $dbms="mysql";
 $host="localhost";
@@ -15,9 +15,9 @@ $userName="root";
 $passWord="";
 $dsn="{$dbms}:host={$host};dbname={$database};charset=utf8";
 try{
- $dbcon=new PDO($dsn,$userName,$passWord);
+  $dbcon=new PDO($dsn,$userName,$passWord);
 }catch(PDOException $e){
- die("Err.no:".$e->getMessage());
+  die("Err.no:".$e->getMessage());
 }
 
 
@@ -32,13 +32,14 @@ try{
 * ------------------------------------
 */
 function PDOQuery($dbconn,$sql,$pararray,$paratype){
- $dbo=$dbconn->prepare($sql);
- for($i=0;$i<sizeof($pararray);$i++){
-  // PDO绑定参数从1开始
-  $dbo->bindParam($i+1,$pararray[$i],$paratype[$i]);
- }
- $dbo->execute();
- return [$dbo->fetchAll(PDO::FETCH_ASSOC),$dbo->rowCount()];
+  $dbo=$dbconn->prepare($sql);
+  for($i=0;$i<sizeof($pararray);$i++){
+    // PDO绑定参数从1开始
+    $dbo->bindParam($i+1,$pararray[$i],$paratype[$i]);
+   }
+   
+   $dbo->execute();
+   return [$dbo->fetchAll(PDO::FETCH_ASSOC),$dbo->rowCount()];
 }
 
 

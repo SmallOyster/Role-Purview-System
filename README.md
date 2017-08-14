@@ -38,18 +38,20 @@
 
 ③ 进入浏览器输入：你的服务器/role/index.php即可。
 
+④ 管理员用户名：super，初始密码：123456
+
 ★如果你修改了当前角色所拥有的权限，请点击导航栏的“退出登录”以显示最新权限。
-
----
-
-## 展望
-
-▲ 登录
 
 ---
 
 ## 鸣谢
 
-▲ Ztree的树形菜单
+* [`zTree`](https://github.com/zTree/zTree_v3)
 
-▲ Bootstrap
+* [`jQuery`](https://jquery.org/)，遵循`MIT`协议
+
+* [`Bootstrap 3.3`](https://getbootstrap.com/)，遵循`MIT`协议
+
+* [`dm_notify.js`](http://www.jqueryscript.net/other/Lightweight-Growl-style-Notification-Plugin-dm_notify-js.html)，遵循`GNU GPL`协议
+
+* Github提供的免费代码仓库

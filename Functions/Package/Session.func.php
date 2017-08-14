@@ -1,10 +1,12 @@
 <?php
 
 /**
+* -----------------------------------------
 * @name PHP公用函数库 2 Session操作函数
 * @copyright 版权所有：小生蚝 <master@xshgzs.com>
 * @create 创建时间：2016-08-28
 * @modify 最后修改时间：2016-10-06
+* -----------------------------------------
 */
 
 /**
@@ -26,7 +28,7 @@ function SetSess($SessName,$SessValue)
    toAlertDie("211");
   }
   for($i=0;$i<$TotalName;$i++){
-   $_SESSION[$SessName[$i]]=$SessValue[$i];  
+   $_SESSION[$SessName[$i]]=$SessValue[$i];
   }
  }
 }
@@ -46,5 +48,3 @@ function GetSess($SessName)
  if(!@$_SESSION[$SessName]) return null;
  else return $_SESSION[$SessName];
 }
-
-?>

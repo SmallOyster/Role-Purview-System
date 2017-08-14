@@ -1,0 +1,52 @@
+#container {
+	max-width: 900px;
+	width: 100%;
+	margin-left:auto;
+	margin-right:auto;	
+}
+
+
+#dm-notif {
+  position: fixed;
+  bottom: 5px;
+  right:5px;
+  margin-left: 5px;
+  z-index:99;
+}
+
+
+/* NOTIFICATIONS BASED ON BOOTSTRAP*/
+.dm-notification {
+	text-align: right;
+  	margin-top: 5px;
+  	padding: 15px;
+  	border: 1px solid #eed3d7;
+  	border-radius: 4px;
+  	float: right;
+  	clear: right;
+}
+
+.dm-notify-red {
+  color: white;
+  background-color: #DA4453;
+}
+.dm-notify-green {
+  color: white;
+  background-color: #37BC9B;
+}
+.dm-notify-blue {
+  color: white;
+  background-color: #4A89DC;
+}
+.dm-notify-yellow {
+  color: white;
+  background-color: #F6BB42;
+}
+.dm-notify-orange {
+  color:white;
+  background-color: #E9573F;
+}
+
+ul li:hover {
+	cursor:pointer;
+}

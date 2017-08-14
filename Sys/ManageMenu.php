@@ -2,61 +2,58 @@
 if(isset($_POST) && $_POST){
 $OprType=!isset($_POST['OprType'])?"0":$_POST['OprType'];
 switch($OprType){
- //编辑
- case 1:
-  $id=$_POST['id'];
-  $name=$_POST['Name'];
-  $file=$_POST['File'];
-  $DOS=$_POST['DOS'];
-  $icon=$_POST['Icon'];
-  $sql="UPDATE sys_menu SET Menuname=?,PageFile=?,PageDOS=?,MenuIcon=? WHERE Menuid=?";
-  $rs=PDOQuery($dbcon,$sql,[$name,$file,$DOS,$icon,$id],[PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_INT]);
-  if($rs[1]>0){
-  	echo "<script>alert('修改节点信息成功！');</script>";
-  }else{
-  	echo "<script>alert('修改节点信息失败！！！');</script>";
+  // 编辑
+  case 1:
+    $id=$_POST['id'];
+    $name=$_POST['Name'];
+    $file=$_POST['File'];
+    $DOS=$_POST['DOS'];
+    $icon=$_POST['Icon'];
+    $sql="UPDATE sys_menu SET Menuname=?,PageFile=?,PageDOS=?,MenuIcon=? WHERE MenuID=?";
+    $rs=PDOQuery($dbcon,$sql,[$name,$file,$DOS,$icon,$id],[PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_INT]);
+    if($rs[1]>0){
+      echo "<script>alert('修改节点信息成功！');</script>";
+    }else{
+      echo "<script>alert('修改节点信息失败！！！');</script>";
+    }
+    break;
+  // 新增
+  case 2:
+    $fid=$_POST['FID'];
+    $name=$_POST['Name'];
+    $file=$_POST['File'];
+    $DOS=$_POST['DOS'];
+    $icon=$_POST['Icon'];
+    $sql="INSERT INTO sys_menu(FatherID,Menuname,MenuIcon,PageFile,PageDOS) VALUES(?,?,?,?,?)";
+    $rs=PDOQuery($dbcon,$sql,[$fid,$name,$icon,$file,$DOS],[PDO::PARAM_INT,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR]);
+    if($rs[1]>0){
+      echo "<script>alert('新增节点成功！');</script>";
+    }else{
+      echo "<script>alert('新增节点失败！！！');</script>";
+    }
+    break;
+  // 删除
+  case 3:
+    $id=$_POST['id'];
+    $sql="DELETE FROM sys_menu WHERE MenuID=?";
+    $sql2="DELETE FROM role_purview WHERE PurvID=?";
+    $rs=PDOQuery($dbcon,$sql,[$id],[PDO::PARAM_INT]);
+    $rs2=PDOQuery($dbcon,$sql2,[$id],[PDO::PARAM_INT]);
+    if($rs[1]>0){
+      echo "<script>alert('删除节点成功！');</script>";
+    }else{
+      echo "<script>alert('删除节点失败！！！');</script>";
+    }
+    break;
+  // 空
+  case 0:
+    break;
+  default:
+    break;
   }
-  break;
- //新增
- case 2:
-  $fid=$_POST['FID'];
-  $name=$_POST['Name'];
-  $file=$_POST['File'];
-  $DOS=$_POST['DOS'];
-  $icon=$_POST['Icon'];
-  $sql="INSERT INTO sys_menu(Fatherid,Menuname,MenuIcon,PageFile,PageDOS) VALUES(?,?,?,?,?)";
-  $rs=PDOQuery($dbcon,$sql,[$fid,$name,$icon,$file,$DOS],[PDO::PARAM_INT,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR,PDO::PARAM_STR]);
-  if($rs[1]>0){
-  	echo "<script>alert('新增节点成功！');</script>";
-  }else{
-  	echo "<script>alert('新增节点失败！！！');</script>";
-  }
-  break;
- //删除
- case 3:
-  $id=$_POST['id'];
-  $sql="DELETE FROM sys_menu WHERE Menuid=?";
-  $sql="DELETE FROM role_purview WHERE Purvid=?";
-  $rs=PDOQuery($dbcon,$sql,[$id],[PDO::PARAM_INT]);
-  $rs2=PDOQuery($dbcon,$sql2,[$id],[PDO::PARAM_INT]);
-  if($rs[1]>0){
-  	echo "<script>alert('删除节点成功！');</script>";
-  }else{
-  	echo "<script>alert('删除节点失败！！！');</script>";
-  }
-  break;
- //空
- case 0:
-  break;
- default:
-  break;
-}
 }
 ?>
 
-<script type="text/javascript" src="res/js/jquery.ztree.core.js"></script>
-<script type="text/javascript" src="res/js/jquery.ztree.excheck.js"></script>
-<script type="text/javascript" src="res/js/jquery.ztree.exedit.js"></script>
 <script>
  var setting = {
   view: {
@@ -79,7 +76,7 @@ switch($OprType){
   }
  };
  
- var zNodes = <?php include("Functions/AllMenuData.php"); ?>;
+ var zNodes = <?php include("Functions/Api/AllMenuData.php"); ?>;
  $(document).ready(function(){
   $.fn.zTree.init($("#treeDemo"), setting, zNodes);
  });
@@ -137,18 +134,19 @@ setModalMsg(1,treeNode.id,treeNode.name);
  * DOS 节点指向文件
  * Icon 节点图标名称，详见font-awesome类
  */
- function setModalMsg(type,id="",name=""){
+ function setModalMsg(type,id,name){
   switch(type){
    /*********** 修改 Edit ***********/
    case 1:
+    var Detail=getMenuData(id);
     $("#OprType").val(1);
     $('#ModalTitle').html("修改节点信息");
     msg="<br>"
     +"<input type='hidden' name='id' value='"+id+"'>"
     +"节点名称：<input name='Name' value='"+name+"'><br>"
-    +"对应目录：<input name='File'><br>"
-    +"对应文件：<input name='DOS'><br>"
-    +"图标名称：<input name='Icon'>";
+    +"对应目录：<input name='File' value='"+Detail.File+"'><br>"
+    +"对应文件：<input name='DOS' value='"+Detail.DOS+"'><br>"
+    +"图标名称：<input name='Icon' value='"+Detail.Icon+"'>";
     $('#msg').html(msg);
     $("#okbtn").attr("onclick","submitOpr();");
     break;
@@ -192,16 +190,58 @@ setModalMsg(1,treeNode.id,treeNode.name);
  function submitOpr(){
   $("form").submit();
  }
+ 
+ function getMenuData(id){
+  var rtn=new Object();
+  $.ajax({
+   url:"Functions/Api/getMenuData.php",
+   type:"POST",
+   dataType:"json",
+   async:false,
+   data:{MID:id},
+   error:function(e){alert();},
+   success:function(g){
+    for(i in g[0]){
+     rtn.id=id;
+     if(i==="Fatherid"){
+      rtn.Fid=g[0][i];
+     }else if(i==="Menuname"){
+      rtn.Name=g[0][i];
+     }else if(i==="MenuIcon"){
+      rtn.Icon=g[0][i];
+     }else if(i==="PageFile"){
+      rtn.File=g[0][i];
+     }else if(i==="PageDOS"){
+      rtn.DOS=g[0][i];
+     }
+    }    
+   }
+  });
+  return rtn;
+ }
 	</script>
 	<style>
 .ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
 
-<h1>增 / 删 / 改 节点</h1>
+<h1>菜单管理</h1>
+
+<hr>
+
+<center>
+<button class="btn btn-info" style="width:97%" onclick='setModalMsg(2,0,"系统主菜单");$("#myModal").modal("show");return false;'>新 增 主 菜 单</button>
+</center>
+
+<hr>
+
 <div class="content_wrap">
-	<div class="zTreeDemoBackground left">
-		<ul id="treeDemo" class="ztree"></ul>
-	</div>
+ <div class="zTreeDemoBackground left" style="margin-left:10px">
+  <ul id="treeDemo" class="ztree"></ul>
+ </div>
+ <div class="right highlight_red">
+  <br>因本操作会导致全系统运作的改动，
+  <br>请在专业人员辅导下使用！
+ </div>
 </div>
 
 

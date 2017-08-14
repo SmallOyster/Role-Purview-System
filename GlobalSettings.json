@@ -1,0 +1,12 @@
+{
+    "System": {
+        "Title": "生蚝角色权限系统 \/ Powered By 生蚝科技",
+        "SessionPrefix": "OAS_",
+        "CacheList": "登录记录,login",
+        "SystemBeginRunDay": "20140711"
+    },
+    "Global": {
+        "Notice_Content": "测试系统公告",
+        "Notice_PubTime": "2017-06-28 00:00:00"
+    }
+}

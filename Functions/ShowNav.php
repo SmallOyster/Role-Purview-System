@@ -1,12 +1,12 @@
 <?php
-$Nav_rs=PDOQuery($dbcon,"SELECT * FROM sys_menu WHERE Fatherid=0",[],[]);
+$Nav_rs=PDOQuery($dbcon,"SELECT * FROM sys_menu WHERE FatherID=0",[],[]);
 $TotalFr=sizeof($Nav_rs[0]);
-$AllPurv=GetSess("AllPurv");
+$AllPurv=GetSess(Prefix."AllPurv");
 
 $ShowMenuFile=array();
 $ShowMenuDOS=array();
 $ShowMenuName=array();
-$HaveChd=0;
+$ShowMenuIcon=array();
 ?>
 
 <nav class="navbar navbar-default navbar-fixed-top"> 
@@ -18,73 +18,86 @@ $HaveChd=0;
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">小生蚝角色权限系统</a>
+    <a class="navbar-brand" href="index.php">东风东游泳队管理系统</a>
   </div>
   
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <div class="collapse navbar-collapse" ID="bs-example-navbar-collapse-1">
   <ul class="nav navbar-nav">
    <?php
    for($fri=0;$fri<$TotalFr;$fri++){
-    $FatherNavid=$Nav_rs[0][$fri]['Menuid'];
+    $FatherNavID=$Nav_rs[0][$fri]['MenuID'];
     $FatherName=$Nav_rs[0][$fri]['Menuname'];
+    $FatherIcon=$Nav_rs[0][$fri]['MenuIcon'];
     //如果有该父菜单的权限
-    if(in_array($FatherNavid,$AllPurv)){
-     $Child_rs=PDOQuery($dbcon,"SELECT * FROM sys_menu WHERE Fatherid=?",[$FatherNavid],[PDO::PARAM_INT]);
+    if(in_array($FatherNavID,$AllPurv)){
+     $HaveChd=0;
+     $Child_rs=PDOQuery($dbcon,"SELECT * FROM sys_menu WHERE FatherID=?",[$FatherNavID],[PDO::PARAM_INT]);
      //如果有子菜单
      if($Child_rs[1]>0){
-      //有多少个子菜单
+      // 有多少个子菜单
       $Totalchd=sizeof($Child_rs[0]);
       $nowchd=0;
       for($chd=0;$chd<$Totalchd;$chd++){
-       //如果没有该子菜单的权限
-       if(in_array($Child_rs[0][$chd]['Menuid'],$AllPurv)){       
-        $HaveChd++;       
+       // 如果有该子菜单的权限
+       if(in_array($Child_rs[0][$chd]['MenuID'],$AllPurv)){
+        $HaveChd++;
         $ShowMenuFile[$fri][$nowchd]=$Child_rs[0][$chd]['PageFile'];
         $ShowMenuDOS[$fri][$nowchd]=$Child_rs[0][$chd]['PageDOS'];
         $ShowMenuName[$fri][$nowchd]=$Child_rs[0][$chd]['Menuname'];
+        $ShowMenuIcon[$fri][$nowchd]=$Child_rs[0][$chd]['MenuIcon'];
         $nowchd++;
-       }else{}
+       }
       }
      }else{
-      //没有子菜单
+      // 没有子菜单
       $HaveChd=0;
      }
     }else{
      $HaveChd=-1;
     }
     
-    if(in_array($FatherNavid,$AllPurv)){
+    if(in_array($FatherNavID,$AllPurv)){
     if($HaveChd==0){
      $NavFile=$Nav_rs[0][$fri]['PageFile'];
      $NavAction=$Nav_rs[0][$fri]['PageDOS'];
+     $NavIcon=$Nav_rs[0][$fri]['MenuIcon'];
    ?>
-   <li><a href="<?php echo '?file='.$NavFile.'&action='.$NavAction; ?>"><i class="fa fa-newspaper-o" aria-hidden="true"></i> <?php echo $FatherName; ?></a></li>
+   <li><a href="<?php echo '?file='.$NavFile.'&action='.$NavAction; ?>"><i class="fa fa-<?php echo $NavIcon; ?>" aria-hIDden="true"></i> <?php echo $FatherName; ?></a></li>
    <?php }else{ ?>
    <li class="dropdown">
-    <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users" aria-hidden="true"></i> <?php echo $FatherName; ?><b class="caret"></b></a>
+    <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-<?php echo $FatherIcon; ?>" aria-hIDden="true"></i> <?php echo $FatherName; ?><b class="caret"></b></a>
     <ul class="dropdown-menu">
     <?php
     $TTshowChd=sizeof($ShowMenuName[$fri]);
     for($j=0;$j<$TTshowChd;$j++){
      $nowfile=$ShowMenuFile[$fri][$j];
      $nowdos=$ShowMenuDOS[$fri][$j];
+     $nowicon=$ShowMenuIcon[$fri][$j];
     ?>
-    <li><a href="<?php echo '?file='.$nowfile.'&action='.$nowdos; ?>"><i class="fa fa-newspaper-o" aria-hidden="true"></i> <?php echo $ShowMenuName[$fri][$j]; ?></a></li>
+    <li><a href="<?php echo '?file='.$nowfile.'&action='.$nowdos; ?>"><i class="fa fa-<?php echo $nowicon; ?>" aria-hIDden="true"></i> <?php echo $ShowMenuName[$fri][$j]; ?></a></li>
     <?php } ?>
     </ul>
    </li>
-   <?php } }} ?>
+   <?php } } } ?>
   </ul>
   
   <ul class="nav navbar-nav navbar-right">
-    <li>
-      <center>
-        <b><font color="green">无名氏</font></b>，欢迎回来
-        <p><span style="color:#4fb4f7;margin-right:8px">角色：<?php echo GetSess("RoleName");?> · <a href="?file=User&action=Logout">退出登陆</a>
-      </center>
+    <li class="dropdown">
+      <a href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown"><img style="wIDth:22px;border-radius:9px;" src="res/img/user.png"></a>
+      <ul class="dropdown-menu">
+        <li><a href="javascript:voID(0)">
+          <b><font color="green"><?php echo $RealName; ?></font></b>，欢迎回来！
+        </a></li>
+        <li class="divider"></li>
+        <li><a href="javascript:voID(0)">
+          角色：<font color="#F57C00"><?php echo $RoleName; ?></font>
+        </a></li>
+        <li class="divider"></li>
+        <li><a href="index.php?file=User&action=UpdatePersonalPW.php">修改您的密码</a></li>
+        <li><a href="User/Logout.php">安全退出系统</a></li>
+      </ul>
     </li>
   </ul>
 </div>
 </div>
 </nav>
-<style>body{padding-top:70px;}</style>
