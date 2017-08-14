@@ -15,13 +15,15 @@ if(isset($_POST) && $_POST){
     die('<script>alert("无此用户或用户名错误！");history.go(-1);</script>');
   }
 
+  $UserID=$Info_rs[0][0]['UserID'];
+
   if($Phone!=$Info_rs[0][0]['Phone'] || $Email!=$Info_rs[0][0]['Email']){
     die('<script>alert("身份认证失败！");history.go(-1);</script>');
   }
 
   setSess(Prefix."FGPW_isVerify","1");
   setSess(Prefix."FGPW_UserID",$UserID);
-  setSess(Prefix."FGPW_RealName",$RealName);
+  setSess(Prefix."FGPW_UserName",$UserName);
 
   die('<script>window.location.href="ForgetPwd_2.php";</script>');
 }

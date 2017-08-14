@@ -31,7 +31,9 @@ if(isset($_POST) && $_POST){
 
   if($rs[1]==1){
     addLog($dbcon,"用户","[$UserName] 忘记密码",$UserName);
-    die("<script>alert('忘记密码成功！\n请重新登录！');window.location.href='../index.php';</script>");
+    die("<script>alert('重置密码成功！\\n请重新登录！');window.location.href='Login.php';</script>");
+  }else{
+    die("<script>alert('重置密码失败！');</script>");
   }
 }
 ?>
@@ -43,7 +45,7 @@ if(isset($_POST) && $_POST){
   <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../res/js/utils.js"></script>
-  <title>忘记密码 / 小生蚝角色权限系统</title>
+  <title>重置密码 / 小生蚝角色权限系统</title>
 </head>
 
 <body>
@@ -55,7 +57,7 @@ if(isset($_POST) && $_POST){
   <div class="col-md-offset-2" style="line-height:12px;">
       <div class="input-group">
         <span class="input-group-addon">用户名</span>
-        <input value="<?php echo $UserName; ?>" disabled>
+        <input class="form-control" value="<?php echo $UserName; ?>" disabled>
         <span class="input-group-addon" ID="forgot">&lt;</span>
       </div>
       <hr>
