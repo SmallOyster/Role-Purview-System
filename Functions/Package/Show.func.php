@@ -5,7 +5,7 @@
 * @name PHP公用函数库 1 内容显示函数
 * @copyright 版权所有：小生蚝 <master@xshgzs.com>
 * @create 创建时间：2016-09-16
-* @modify 最后修改时间：2017-06-10
+* @modify 最后修改时间：2017-08-22
 * ----------------------------------------
 */
 
@@ -87,10 +87,10 @@ function makeOprBtn($name,$color,$file,$action,$param=array())
   foreach($param as $i=>$value){
     $param_name=$param[$i][0];
     $param_value=$param[$i][1];
-    $url_param.="&$param_name=$param_value";
+    $url_param.="&".$param_name."=".$param_value;
   }
   
-  $url='<a class="btn btn-'.$color.'" href="'.$url_param.'">'.$name.'</a>';
+  $url='<a class="btn btn-'.$color.'" href="'.$url_param.'" style="width:98%">'.$name.'</a>';
   return $url;
 }
 
